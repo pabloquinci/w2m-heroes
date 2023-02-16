@@ -1,29 +1,24 @@
 package com.w2m.dto;
 
-public class HeroeDTO {
-	
-	private String nombre;
-	private Integer id;
-	
-	
+import lombok.*;
 
-	public HeroeDTO(String nombre, Integer id) {
+@Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class HeroeDTO {
+
+	private Long id;
+	private String nombre;
+
+
+
+	/*public HeroeDTO(Long id,String nombre) {
 		super();
 		this.nombre = nombre;
 		this.id = id;
-	}
-	public String getNombre() {
-		return nombre;
-	}
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
+	}*/
 	
 	
 

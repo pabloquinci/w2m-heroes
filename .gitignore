@@ -31,3 +31,6 @@ HELP.md
 mvnw
 mvnw.cmd
 target/
+
+app-w2m-heores.iml
+.idea/

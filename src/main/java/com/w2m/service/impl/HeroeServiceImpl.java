@@ -1,5 +1,6 @@
 package com.w2m.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,12 @@ public class HeroeServiceImpl implements HeroeService {
 	private HeroeRepository heroeRepository;
 	@Override
 	public Optional<Heroe> getHeroeById(Integer id) {
-		// TODO Auto-generated method stub
 		return heroeRepository.findById(id);
+	}
+
+	@Override
+	public Optional<List<Heroe>> getAll() {
+		return Optional.of(heroeRepository.findAll());
 	}
 
 }

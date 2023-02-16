@@ -1,35 +1,33 @@
 package com.w2m.model;
 
-import java.util.List;
+import jakarta.persistence.*;
+import lombok.*;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-
+@Entity
+@Table(name="HEROE")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Heroe {
-	
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private static Integer id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private Long id;
 	@Column
-	private static String nombre;
-	@Transient
-	private static List<Superpoder> superpoderes;
-	
-	public static Integer getId() {
-		return id;
-	}
-	public static String getNombre() {
+	private String nombre;
+
+	public String getNombre() {
 		return nombre;
 	}
-	public static List<Superpoder> getSuperpoderes() {
-		return superpoderes;
+
+	public Long getId() {
+		return id;
 	}
-	
-	
-	
+
+/*private Heroe(){
+		throw new UnsupportedOperationException("This is a utility class and cannot be instantied")
+	}*/
+
 
 }
