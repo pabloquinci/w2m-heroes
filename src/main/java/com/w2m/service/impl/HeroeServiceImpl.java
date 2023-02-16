@@ -15,6 +15,13 @@ public class HeroeServiceImpl implements HeroeService {
 
 	@Autowired
 	private HeroeRepository heroeRepository;
+
+
+	@Autowired
+	public HeroeServiceImpl(HeroeRepository heroeRepository){
+		this.heroeRepository=heroeRepository;
+
+	}
 	@Override
 	public Optional<Heroe> getHeroeById(Integer id) {
 		return heroeRepository.findById(id);

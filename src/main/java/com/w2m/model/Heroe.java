@@ -3,11 +3,14 @@ package com.w2m.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
+
 @Table(name="HEROE")
+@Entity
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Heroe {
 
 	@Id
