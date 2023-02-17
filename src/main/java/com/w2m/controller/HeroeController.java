@@ -1,5 +1,6 @@
 package com.w2m.controller;
 
+import com.w2m.dto.HeroesDTO;
 import com.w2m.exception.MandatoryParamsException;
 import com.w2m.exception.ResponseDefault;
 import com.w2m.model.Heroe;
@@ -27,16 +28,13 @@ public class HeroeController {
 	HeroeService heroeService;
 
 	@GetMapping("")
-	public ResponseEntity<List<HeroeDTO>> getAll() throws Exception {
+	public ResponseEntity<HeroesDTO> getAll() throws Exception {
 
-		Optional<List<Heroe>> heroes=heroeService.getAll();
+		Optional<HeroesDTO> heroesDTO=heroeService.getAll();
 
-		List<HeroeDTO> heroesDTO= new ArrayList<>();
-
-		heroes.get().forEach(p->heroesDTO.add(new HeroeDTO(p.getId(), p.getNombre())));
-
-		return new ResponseEntity<>(heroesDTO,HttpStatus.OK);
+		return new ResponseEntity<>(heroesDTO.get(),HttpStatus.OK);
 
 	}
+
 
 }

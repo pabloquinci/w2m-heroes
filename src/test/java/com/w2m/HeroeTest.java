@@ -1,22 +1,17 @@
 package com.w2m;
 
 import com.w2m.dto.HeroeDTO;
-import com.w2m.model.Heroe;
-import com.w2m.persistence.HeroeRepository;
-import com.w2m.service.HeroeService;
+import com.w2m.dto.HeroesDTO;
 import com.w2m.service.impl.HeroeServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.internal.runners.JUnit4ClassRunner;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -36,20 +31,24 @@ public class HeroeTest {
     @Mock
     private HeroeServiceImpl heroeService;
 
-    Heroe heroe1;
-    List<Heroe> heroes= new ArrayList<>();
+    @InjectMocks
+    ModelMapper modelMapper;
+
+    HeroeDTO heroeBatman;
+
+    Optional<HeroesDTO> heroes= Optional.of(HeroesDTO.builder().build());
 
     @Before
     public void setUpHeroes() {
-        heroe1=Heroe.builder().id(1L).nombre("Pablo").build();
-        heroes.add(heroe1);
+        heroeBatman=HeroeDTO.builder().id(1L).nombre("Batman").build();
+        heroes.get().setHeroes(new ArrayList<>(List.of(heroeBatman)));
 
     }
 
     @Test
     public void whenConsultaHeroes() {
-        when(heroeService.getAll()).thenReturn(Optional.of(heroes));
-        Optional<List<Heroe>> heroes= heroeService.getAll();
+        when(heroeService.getAll()).thenReturn(Optional.of(heroes.get()));
+        Optional<HeroesDTO> heroes= heroeService.getAll();
         assertEquals(true, !heroes.isEmpty());
     }
 }

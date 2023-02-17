@@ -11,14 +11,6 @@ public class HeroeDTO {
 
 	private Long id;
 	private String nombre;
-
-
-
-	/*public HeroeDTO(Long id,String nombre) {
-		super();
-		this.nombre = nombre;
-		this.id = id;
-	}*/
 	
 	
 
