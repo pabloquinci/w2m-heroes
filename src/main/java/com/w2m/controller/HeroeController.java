@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.w2m.dto.HeroeDTO;
 
@@ -33,6 +30,16 @@ public class HeroeController {
 		Optional<HeroesDTO> heroesDTO=heroeService.getAll();
 
 		return new ResponseEntity<>(heroesDTO.get(),HttpStatus.OK);
+
+	}
+
+	@GetMapping("/getHeroeById")
+	@ResponseBody
+	public ResponseEntity<HeroeDTO> getById(@RequestParam(value="heroeId") Long id) throws Exception {
+
+		Optional<HeroeDTO> heroeDTO=heroeService.getHeroeById(id);
+
+		return new ResponseEntity<>(heroeDTO.get(),HttpStatus.OK);
 
 	}
 

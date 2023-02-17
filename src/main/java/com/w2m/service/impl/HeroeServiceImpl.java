@@ -1,11 +1,15 @@
 package com.w2m.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import com.w2m.dto.HeroeDTO;
 import com.w2m.dto.HeroesDTO;
+import com.w2m.exception.HeroeNoEncontradoException;
+import com.w2m.exception.ResponseDefault;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,10 +33,22 @@ public class HeroeServiceImpl implements HeroeService {
 		this.heroeRepository=heroeRepository;
 
 	}
+
 	@Override
-	public Optional<Heroe> getHeroeById(Integer id) {
-		return heroeRepository.findById(id);
+	public Optional<HeroeDTO> getHeroeById(Long id) {
+		Optional<Heroe> heroe= heroeRepository.findById(id);
+		if(heroe.isEmpty()){
+			throw new HeroeNoEncontradoException(ResponseDefault
+					.builder()
+					.date(LocalDateTime.now())
+					.message("Hereo con id: "+ id + "no encontrado")
+					.build());
+		}
+		HeroeDTO heroeDTO=modelMapper.map(heroe.get(), HeroeDTO.class);
+
+		return Optional.of(heroeDTO);
 	}
+
 
 	@Override
 	public Optional<HeroesDTO> getAll() {
@@ -47,5 +63,7 @@ public class HeroeServiceImpl implements HeroeService {
 		HeroesDTO heroesDTO= HeroesDTO.builder().heroes(listaHeroesDTO).build();
 		return Optional.of(heroesDTO);
 	}
+
+
 
 }

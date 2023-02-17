@@ -8,9 +8,10 @@ import com.w2m.dto.HeroesDTO;
 import com.w2m.model.Heroe;
 
 public interface HeroeService {
-	
-	public Optional<Heroe> getHeroeById(Integer id);
 
 	public Optional<HeroesDTO> getAll();
+
+	public Optional<HeroeDTO> getHeroeById(Long id);
+
 
 }

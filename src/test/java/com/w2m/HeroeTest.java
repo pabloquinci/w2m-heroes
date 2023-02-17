@@ -40,7 +40,7 @@ public class HeroeTest {
 
     @Before
     public void setUpHeroes() {
-        heroeBatman=HeroeDTO.builder().id(1L).nombre("Batman").build();
+        heroeBatman=HeroeDTO.builder().id(5346L).nombre("Batman").build();
         heroes.get().setHeroes(new ArrayList<>(List.of(heroeBatman)));
 
     }
