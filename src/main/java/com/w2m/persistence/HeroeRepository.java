@@ -8,7 +8,7 @@ import com.w2m.model.Heroe;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface HeroeRepository extends JpaRepository<Heroe, Integer>{
-	Optional<Heroe> findById(Integer id);
+public interface HeroeRepository extends JpaRepository<Heroe, Long>{
+	Optional<Heroe> findById(Long id);
 
 }
