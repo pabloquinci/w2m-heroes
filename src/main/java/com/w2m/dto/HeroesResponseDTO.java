@@ -10,6 +10,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class HeroesDTO {
-    List<HeroeDTO> heroes= new ArrayList<>();
+public class HeroesResponseDTO {
+    List<HeroeResponseDTO> heroes= new ArrayList<>();
 }

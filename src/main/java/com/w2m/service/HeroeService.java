@@ -1,19 +1,19 @@
 package com.w2m.service;
 
-import java.util.List;
 import java.util.Optional;
 
-import com.w2m.dto.HeroeDTO;
-import com.w2m.dto.HeroesDTO;
-import com.w2m.model.Heroe;
+import com.w2m.dto.HeroeRequestDTO;
+import com.w2m.dto.HeroeResponseDTO;
+import com.w2m.dto.HeroesResponseDTO;
 
 public interface HeroeService {
 
-	public Optional<HeroesDTO> getAll();
+	public Optional<HeroesResponseDTO> getAll();
 
-	public Optional<HeroeDTO> getHeroeById(Long id);
+	public Optional<HeroeResponseDTO> getHeroeById(Long id);
 
-	public Optional<HeroesDTO> getHeroesByNombre(String nombre);
+	public Optional<HeroesResponseDTO> getHeroesByNombre(String nombre);
+	public void crearHeroe(HeroeRequestDTO heroe);
 
 
 

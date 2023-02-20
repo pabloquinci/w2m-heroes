@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.w2m.dto.HeroeDTO;
-import com.w2m.dto.HeroesDTO;
+import com.w2m.dto.HeroeRequestDTO;
+import com.w2m.dto.HeroeResponseDTO;
+import com.w2m.dto.HeroesResponseDTO;
 import com.w2m.exception.HeroeNoEncontradoException;
+import com.w2m.exception.HeroeYaExistenteException;
 import com.w2m.exception.ResponseDefault;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,8 @@ import org.springframework.stereotype.Service;
 import com.w2m.model.Heroe;
 import com.w2m.persistence.HeroeRepository;
 import com.w2m.service.HeroeService;
+
+import javax.swing.text.html.Option;
 
 @Service
 public class HeroeServiceImpl implements HeroeService {
@@ -33,60 +37,73 @@ public class HeroeServiceImpl implements HeroeService {
 
 	}
 	@Override
-	public Optional<HeroeDTO> getHeroeById(Long id) {
+	public Optional<HeroeResponseDTO> getHeroeById(Long id) {
 		Optional <Heroe> heroe= heroeRepository.findById(id);
 
 		if(heroe.isEmpty()){
 			throw new HeroeNoEncontradoException(ResponseDefault
 					.builder()
 					.date(LocalDateTime.now())
-					.message("Heroe No Encontrado...")
+					.mensaje("Heroe No Encontrado...")
 					.build());
 		}
 
-		HeroeDTO heroeDTO= HeroeDTO
+		HeroeResponseDTO heroeResponseDTO = HeroeResponseDTO
 				.builder()
 				.nombre(heroe.get().getNombre())
 				.id(heroe.get().getId())
 				.build();
 
-		return Optional.of(heroeDTO);
+		return Optional.of(heroeResponseDTO);
 	}
 
 
 	@Override
-	public Optional<HeroesDTO> getAll() {
+	public Optional<HeroesResponseDTO> getAll() {
 		List<Heroe> heroes=heroeRepository.findAll();
-		List<HeroeDTO> listaHeroesDTO= new ArrayList<>();
+		List<HeroeResponseDTO> listaHeroesDTO= new ArrayList<>();
 
 		heroes.stream().forEach(heroe -> {
-			HeroeDTO heroeDTO= modelMapper.map(heroe, HeroeDTO.class);
-			listaHeroesDTO.add(heroeDTO);
+			HeroeResponseDTO heroeResponseDTO = modelMapper.map(heroe, HeroeResponseDTO.class);
+			listaHeroesDTO.add(heroeResponseDTO);
 		});
 
-		HeroesDTO heroesDTO= HeroesDTO.builder().heroes(listaHeroesDTO).build();
-		return Optional.of(heroesDTO);
+		HeroesResponseDTO heroesResponseDTO = HeroesResponseDTO.builder().heroes(listaHeroesDTO).build();
+		return Optional.of(heroesResponseDTO);
 	}
 
 	@Override
-	public Optional<HeroesDTO> getHeroesByNombre(String nombre) {
-		Optional<List<Heroe>> heroes= heroeRepository.findByNombre(nombre);
-		List<HeroeDTO> listaHeroesDTO= new ArrayList<>();
+	public Optional<HeroesResponseDTO> getHeroesByNombre(String nombre) {
+		Optional<List<Heroe>> heroes= heroeRepository.buscarPorNombre(nombre);
+		List<HeroeResponseDTO> listaHeroesDTO= new ArrayList<>();
 
 		if(heroes.isEmpty() || heroes.get().size()==0){
 			throw new HeroeNoEncontradoException(ResponseDefault
 					.builder()
 					.date(LocalDateTime.now())
-					.message("Heroes No Encontrados con ese parametro de nombre...")
+					.mensaje("Heroes No Encontrados con ese parametro de nombre...")
 					.build());
 		}
 
 		heroes.get().stream().forEach(heroe -> {
-			HeroeDTO heroeDTO= modelMapper.map(heroe, HeroeDTO.class);
-			listaHeroesDTO.add(heroeDTO);
+			HeroeResponseDTO heroeResponseDTO = modelMapper.map(heroe, HeroeResponseDTO.class);
+			listaHeroesDTO.add(heroeResponseDTO);
 		});
-		HeroesDTO heroesDTO= HeroesDTO.builder().heroes(listaHeroesDTO).build();
-		return Optional.of(heroesDTO);
+		HeroesResponseDTO heroesResponseDTO = HeroesResponseDTO.builder().heroes(listaHeroesDTO).build();
+		return Optional.of(heroesResponseDTO);
 	}
 
+	@Override
+	public void crearHeroe(HeroeRequestDTO heroe) {
+		Optional<Heroe> heroeBuscado= heroeRepository.findByNombre(heroe.getNombre());
+		if(heroeBuscado.isPresent()){
+			throw new HeroeYaExistenteException(ResponseDefault
+					.builder()
+					.mensaje("El heroe que está intentando crear ya existe")
+					.date(LocalDateTime.now())
+					.build());
+		}
+		Heroe heroeNuevo=Heroe.builder().nombre(heroe.getNombre()).build();
+		Heroe h1=heroeRepository.saveAndFlush(heroeNuevo);
+	}
 }

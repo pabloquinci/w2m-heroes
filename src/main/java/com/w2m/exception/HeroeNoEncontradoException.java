@@ -7,7 +7,7 @@ public class HeroeNoEncontradoException extends RuntimeException{
     ResponseDefault responseDefault;
 
     public HeroeNoEncontradoException(ResponseDefault responseDefault){
-        super(responseDefault.getMessage());
+        super(responseDefault.getMensaje());
         this.responseDefault=responseDefault;
     }
 

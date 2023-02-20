@@ -15,7 +15,9 @@ public interface HeroeRepository extends JpaRepository<Heroe, Long>{
 	Optional<Heroe> findById(Long id);
 
 	@Query("SELECT u FROM Heroe u WHERE LOWER(u.nombre) like %:nombre%")
-	Optional<List<Heroe>> findByNombre(@Param("nombre") String nombre);
+	Optional<List<Heroe>> buscarPorNombre(@Param("nombre") String nombre);
+
+	Optional<Heroe> findByNombre(String nombre);
 
 
 }
