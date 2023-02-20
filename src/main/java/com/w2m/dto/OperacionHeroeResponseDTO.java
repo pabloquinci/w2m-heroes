@@ -7,8 +7,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class HeroeRequestDTO {
+public class OperacionHeroeResponseDTO {
 
-    @NonNull
-    private String nombre;
+    private String mensaje;
 }
