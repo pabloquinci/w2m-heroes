@@ -158,4 +158,15 @@ public class HeroeTest {
         when(heroeRepository.findById(3466L)).thenThrow(new HeroeNoEncontradoException(ResponseDefault.builder().build()));
         heroeService.modificarHeore(ModificarHeroeRequestDTO.builder().heroeId(34466L).nombre("LALALALA").build());
     }
+
+    @Test
+    public void whenEliminarHeroeExiste(){
+        when(heroeRepository.findById(34676L)).thenThrow(new HeroeNoEncontradoException(ResponseDefault.builder().build()));
+        heroeService.modificarHeore(ModificarHeroeRequestDTO.builder().heroeId(34466L).nombre("LALALALA").build());
+    }
+    @Test
+    public void whenEliminarHeroe(){
+        heroeService.eliminarHeroe(EliminarHeroeRequestDTO.builder().heroeId(3446L).nombre("Batman").build());
+    }
+
 }

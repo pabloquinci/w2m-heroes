@@ -5,10 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.w2m.dto.CrearHeroeRequestDTO;
-import com.w2m.dto.HeroeResponseDTO;
-import com.w2m.dto.HeroesResponseDTO;
-import com.w2m.dto.ModificarHeroeRequestDTO;
+import com.w2m.dto.*;
 import com.w2m.exception.HeroeNoEncontradoException;
 import com.w2m.exception.HeroeYaExistenteException;
 import com.w2m.exception.ResponseDefault;
@@ -125,5 +122,23 @@ public class HeroeServiceImpl implements HeroeService {
 		heroeRepository.save(heroeModificado);
 
 
+	}
+
+	@Override
+	public void eliminarHeroe(EliminarHeroeRequestDTO heroe) {
+		Optional <Heroe> heroeBuscado= heroeRepository.findByIdAndNombre(heroe.getHeroeId(), heroe.getNombre());
+		if(!heroeBuscado.isPresent()){
+			throw new HeroeNoEncontradoException(ResponseDefault
+					.builder()
+					.mensaje("El heroe que está intentando eliminar no existe")
+					.date(LocalDateTime.now())
+					.build());
+		}
+		Heroe heroeEliminado= Heroe.builder()
+				.nombre(heroe.getNombre())
+				.id(heroeBuscado.get().getId())
+				.build();
+
+		heroeRepository.delete(heroeEliminado);
 	}
 }
