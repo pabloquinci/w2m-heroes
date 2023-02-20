@@ -1,21 +1,17 @@
 package com.w2m.controller;
 
-import com.w2m.dto.HeroesDTO;
-import com.w2m.exception.MandatoryParamsException;
-import com.w2m.exception.ResponseDefault;
-import com.w2m.model.Heroe;
+import com.w2m.dto.CrearHeroeResponseDTO;
+import com.w2m.dto.HeroeRequestDTO;
+import com.w2m.dto.HeroesResponseDTO;
 import com.w2m.service.HeroeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import com.w2m.dto.HeroeDTO;
+import com.w2m.dto.HeroeResponseDTO;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 @RestController
 @RequestMapping("/heroes")
@@ -25,19 +21,19 @@ public class HeroeController {
 	HeroeService heroeService;
 
 	@GetMapping("")
-	public ResponseEntity<HeroesDTO> getAll() throws Exception {
+	public ResponseEntity<HeroesResponseDTO> getAll() throws Exception {
 
-		Optional<HeroesDTO> heroesDTO=heroeService.getAll();
+		Optional<HeroesResponseDTO> heroesDTO=heroeService.getAll();
 
-		return new ResponseEntity<HeroesDTO>(heroesDTO.get(),HttpStatus.OK);
+		return new ResponseEntity<HeroesResponseDTO>(heroesDTO.get(),HttpStatus.OK);
 
 	}
 
 	@GetMapping("/getHeroeById")
 	@ResponseBody
-	public ResponseEntity<HeroeDTO> getById(@RequestParam(value="heroeId") Long id) throws Exception {
+	public ResponseEntity<HeroeResponseDTO> getById(@RequestParam(value="heroeId") Long id) throws Exception {
 
-		Optional<HeroeDTO> heroeDTO=heroeService.getHeroeById(id);
+		Optional<HeroeResponseDTO> heroeDTO=heroeService.getHeroeById(id);
 
 		return new ResponseEntity<>(heroeDTO.get(),HttpStatus.OK);
 
@@ -45,12 +41,22 @@ public class HeroeController {
 
 	@GetMapping("/getHeroesByNombre")
 	@ResponseBody
-	public ResponseEntity<HeroesDTO> getHeroesByNombre(@RequestParam(value = "nombre") String nombre) throws Exception{
+	public ResponseEntity<HeroesResponseDTO> getHeroesByNombre(@RequestParam(value = "nombre") String nombre) throws Exception{
 
-		Optional<HeroesDTO> heroesDTO=heroeService.getHeroesByNombre(nombre);
+		Optional<HeroesResponseDTO> heroesDTO=heroeService.getHeroesByNombre(nombre);
 
-		return new ResponseEntity<HeroesDTO>(heroesDTO.get(),HttpStatus.OK);
+		return new ResponseEntity<HeroesResponseDTO>(heroesDTO.get(),HttpStatus.OK);
+	}
 
+	@PostMapping("/crearHeroe")
+	@ResponseBody
+	public ResponseEntity<CrearHeroeResponseDTO> crearHeroe(@Validated @RequestBody HeroeRequestDTO crearHeroeRequest) throws Exception{
+
+		CrearHeroeResponseDTO response=CrearHeroeResponseDTO.builder().mensaje("Heroe Creado").build();
+
+		heroeService.crearHeroe(crearHeroeRequest);
+
+		return new ResponseEntity<CrearHeroeResponseDTO>(response,HttpStatus.OK);
 
 	}
 

@@ -7,7 +7,7 @@ public class MandatoryParamsException extends RuntimeException{
     ResponseDefault responseDefault;
 
     public MandatoryParamsException(ResponseDefault responseDefault){
-        super(responseDefault.getMessage());
+        super(responseDefault.getMensaje());
         this.responseDefault=responseDefault;
     }
 

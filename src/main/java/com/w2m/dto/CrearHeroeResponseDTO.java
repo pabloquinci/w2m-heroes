@@ -7,11 +7,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class HeroeDTO {
+public class CrearHeroeResponseDTO {
 
-	private Long id;
-	private String nombre;
-	
-	
-
+    private String mensaje;
 }

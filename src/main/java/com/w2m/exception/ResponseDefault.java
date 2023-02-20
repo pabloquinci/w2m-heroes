@@ -10,6 +10,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResponseDefault {
-    private String message;
+    private String mensaje;
     private LocalDateTime date= LocalDateTime.now();
 }
