@@ -3,7 +3,8 @@ package com.w2m.service;
 import java.util.Optional;
 
 import com.w2m.dto.*;
-import jakarta.transaction.Transactional;
+
+import javax.transaction.Transactional;
 
 public interface HeroeService {
 
