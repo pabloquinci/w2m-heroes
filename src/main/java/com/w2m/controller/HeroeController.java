@@ -1,6 +1,7 @@
 package com.w2m.controller;
 
 import com.w2m.dto.*;
+import com.w2m.logging.LogExecutionTime;
 import com.w2m.service.HeroeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,9 @@ public class HeroeController {
 	@Autowired
 	HeroeService heroeService;
 
+
 	@GetMapping("")
+	@LogExecutionTime
 	public ResponseEntity<HeroesResponseDTO> getAll() throws Exception {
 
 		Optional<HeroesResponseDTO> heroesDTO = heroeService.getAll();
