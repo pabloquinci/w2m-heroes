@@ -5,9 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.w2m.dto.HeroeRequestDTO;
+import com.w2m.dto.CrearHeroeRequestDTO;
 import com.w2m.dto.HeroeResponseDTO;
 import com.w2m.dto.HeroesResponseDTO;
+import com.w2m.dto.ModificarHeroeRequestDTO;
 import com.w2m.exception.HeroeNoEncontradoException;
 import com.w2m.exception.HeroeYaExistenteException;
 import com.w2m.exception.ResponseDefault;
@@ -18,8 +19,6 @@ import org.springframework.stereotype.Service;
 import com.w2m.model.Heroe;
 import com.w2m.persistence.HeroeRepository;
 import com.w2m.service.HeroeService;
-
-import javax.swing.text.html.Option;
 
 @Service
 public class HeroeServiceImpl implements HeroeService {
@@ -94,7 +93,7 @@ public class HeroeServiceImpl implements HeroeService {
 	}
 
 	@Override
-	public void crearHeroe(HeroeRequestDTO heroe) {
+	public void crearHeroe(CrearHeroeRequestDTO heroe) {
 		Optional<Heroe> heroeBuscado= heroeRepository.findByNombre(heroe.getNombre());
 		if(heroeBuscado.isPresent()){
 			throw new HeroeYaExistenteException(ResponseDefault
@@ -105,5 +104,26 @@ public class HeroeServiceImpl implements HeroeService {
 		}
 		Heroe heroeNuevo=Heroe.builder().nombre(heroe.getNombre()).build();
 		Heroe h1=heroeRepository.saveAndFlush(heroeNuevo);
+	}
+
+	@Override
+	public void modificarHeore(ModificarHeroeRequestDTO heroe) {
+		Optional <Heroe> heroeBuscado= heroeRepository.findById(heroe.getHeroeId());
+		if(!heroeBuscado.isPresent()){
+			throw new HeroeNoEncontradoException(ResponseDefault
+					.builder()
+					.mensaje("El heroe que está intentando modificar no existe")
+					.date(LocalDateTime.now())
+					.build());
+		}
+
+		Heroe heroeModificado= Heroe.builder()
+				.nombre(heroe.getNombre())
+				.id(heroeBuscado.get().getId())
+				.build();
+
+		heroeRepository.save(heroeModificado);
+
+
 	}
 }

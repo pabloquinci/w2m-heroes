@@ -1,16 +1,12 @@
 package com.w2m.controller;
 
-import com.w2m.dto.CrearHeroeResponseDTO;
-import com.w2m.dto.HeroeRequestDTO;
-import com.w2m.dto.HeroesResponseDTO;
+import com.w2m.dto.*;
 import com.w2m.service.HeroeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import com.w2m.dto.HeroeResponseDTO;
 
 import java.util.Optional;
 @RestController
@@ -50,15 +46,27 @@ public class HeroeController {
 
 	@PostMapping("/crearHeroe")
 	@ResponseBody
-	public ResponseEntity<CrearHeroeResponseDTO> crearHeroe(@Validated @RequestBody HeroeRequestDTO crearHeroeRequest) throws Exception{
+	public ResponseEntity<OperacionHeroeResponseDTO> crearHeroe(@Validated @RequestBody CrearHeroeRequestDTO crearHeroeRequest) throws Exception{
 
-		CrearHeroeResponseDTO response=CrearHeroeResponseDTO.builder().mensaje("Heroe Creado").build();
+		OperacionHeroeResponseDTO response= OperacionHeroeResponseDTO.builder().mensaje("Heroe Creado").build();
 
 		heroeService.crearHeroe(crearHeroeRequest);
 
-		return new ResponseEntity<CrearHeroeResponseDTO>(response,HttpStatus.OK);
+		return new ResponseEntity<OperacionHeroeResponseDTO>(response,HttpStatus.OK);
 
 	}
+
+	@PutMapping("/modificarHeroe")
+	@ResponseBody
+	public ResponseEntity<OperacionHeroeResponseDTO> modificarHeroe(@Validated @RequestBody ModificarHeroeRequestDTO modificarHeroeRequest) throws Exception{
+		OperacionHeroeResponseDTO response= OperacionHeroeResponseDTO.builder().mensaje("Heroe Modificado").build();
+
+		heroeService.modificarHeore(modificarHeroeRequest);
+
+		return new ResponseEntity<OperacionHeroeResponseDTO>(response,HttpStatus.OK);
+
+	}
+
 
 
 }

@@ -1,22 +1,17 @@
 package com.w2m;
 
-import com.w2m.dto.HeroeRequestDTO;
-import com.w2m.dto.HeroeResponseDTO;
-import com.w2m.dto.HeroesResponseDTO;
+import com.w2m.dto.*;
 import com.w2m.exception.HeroeNoEncontradoException;
 import com.w2m.exception.HeroeYaExistenteException;
 import com.w2m.exception.ResponseDefault;
 import com.w2m.model.Heroe;
 import com.w2m.persistence.HeroeRepository;
 import com.w2m.service.impl.HeroeServiceImpl;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Answers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -155,6 +150,12 @@ public class HeroeTest {
     public void whenSolicitudCreacionHeroeYaExiste(){
 
         when(heroeService.getHeroesByNombre("Batman")).thenThrow(new HeroeYaExistenteException(ResponseDefault.builder().build()));
-        heroeService.crearHeroe(HeroeRequestDTO.builder().nombre("Batman").build());
+        heroeService.crearHeroe(CrearHeroeRequestDTO.builder().nombre("Batman").build());
+    }
+
+    @Test
+    public void whenSOlicituModificacionHeroeNoExistente(){
+        when(heroeRepository.findById(3466L)).thenThrow(new HeroeNoEncontradoException(ResponseDefault.builder().build()));
+        heroeService.modificarHeore(ModificarHeroeRequestDTO.builder().heroeId(34466L).nombre("LALALALA").build());
     }
 }
