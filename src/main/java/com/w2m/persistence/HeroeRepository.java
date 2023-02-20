@@ -19,5 +19,6 @@ public interface HeroeRepository extends JpaRepository<Heroe, Long>{
 
 	Optional<Heroe> findByNombre(String nombre);
 
+	Optional<Heroe> findByIdAndNombre(Long id,String nombre);
 
 }
