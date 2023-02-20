@@ -13,5 +13,8 @@ public interface HeroeService {
 
 	public Optional<HeroeDTO> getHeroeById(Long id);
 
+	public Optional<HeroesDTO> getHeroesByNombre(String nombre);
+
+
 
 }

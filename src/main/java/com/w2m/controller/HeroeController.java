@@ -29,7 +29,7 @@ public class HeroeController {
 
 		Optional<HeroesDTO> heroesDTO=heroeService.getAll();
 
-		return new ResponseEntity<>(heroesDTO.get(),HttpStatus.OK);
+		return new ResponseEntity<HeroesDTO>(heroesDTO.get(),HttpStatus.OK);
 
 	}
 
@@ -40,6 +40,17 @@ public class HeroeController {
 		Optional<HeroeDTO> heroeDTO=heroeService.getHeroeById(id);
 
 		return new ResponseEntity<>(heroeDTO.get(),HttpStatus.OK);
+
+	}
+
+	@GetMapping("/getHeroesByNombre")
+	@ResponseBody
+	public ResponseEntity<HeroesDTO> getHeroesByNombre(@RequestParam(value = "nombre") String nombre) throws Exception{
+
+		Optional<HeroesDTO> heroesDTO=heroeService.getHeroesByNombre(nombre);
+
+		return new ResponseEntity<HeroesDTO>(heroesDTO.get(),HttpStatus.OK);
+
 
 	}
 
