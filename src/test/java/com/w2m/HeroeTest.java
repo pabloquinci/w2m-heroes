@@ -6,12 +6,14 @@ import com.w2m.exception.HeroeYaExistenteException;
 import com.w2m.exception.ResponseDefault;
 import com.w2m.model.Heroe;
 import com.w2m.persistence.HeroeRepository;
+import com.w2m.service.HeroeService;
 import com.w2m.service.impl.HeroeServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -28,15 +30,18 @@ import java.util.Optional;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@RunWith(SpringRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 @DataJpaTest
 public class HeroeTest {
 
 
-    @Mock
+   @Mock
     HeroeServiceImpl heroeService;
 
-    @Autowired
+/*    @Autowired
+    private HeroeService heroeService;*/
+
+    @Mock
     private HeroeRepository heroeRepository;
 
     @InjectMocks
@@ -74,7 +79,7 @@ public class HeroeTest {
 
     @Before
     public void setUpHeroes() {
-        heroeRepository=org.mockito.Mockito.mock(HeroeRepository.class);
+        //heroeRepository=org.mockito.Mockito.mock(HeroeRepository.class);
 
         heroeBatmanDTO= HeroeResponseDTO.builder().id(3466L).nombre("Batman").build();
         heroeSupermanDTO= HeroeResponseDTO.builder().id(5986L).nombre("Superman").build();
@@ -115,23 +120,23 @@ public class HeroeTest {
 
     @Test
     public void whenConsultaHeroes() {
-        when(heroeRepository.findAll()).thenReturn(heroesModel);
-        when(heroeService.getAll()).thenReturn(heroes);
+        lenient().when(heroeRepository.findAll()).thenReturn(heroesModel);
+        lenient().when(heroeService.getAll()).thenReturn(heroes);
         HeroesResponseDTO heroes= heroeService.getAll().get();
         assertEquals(true, !Objects.isNull(heroes));
     }
 
     @Test
     public void whenHeroeExiste(){
-        when(heroeService.getHeroeById(9697L)).thenReturn(Optional.of(heroeWolverineDTO));
-        when(heroeRepository.findById(9697L)).thenReturn(Optional.of(heroeWolverineModel));
+        lenient().when(heroeRepository.findById(9697L)).thenReturn(Optional.of(heroeWolverineModel));
+        lenient().when(heroeService.getHeroeById(9697L)).thenReturn(Optional.of(heroeWolverineDTO));
         Optional<HeroeResponseDTO> heroes= heroeService.getHeroeById(9697L);
         assertEquals(true, !heroes.isEmpty());
     }
     @Test
     public void whenHeroeNoExiste(){
-        when(heroeRepository.findById(23596L)).thenReturn(Optional.empty());
-        when(heroeService.getHeroeById(23596L)).thenReturn(any());
+        lenient().when(heroeRepository.findById(23596L)).thenReturn(Optional.empty());
+        lenient().when(heroeService.getHeroeById(23596L)).thenReturn(any());
         Optional<HeroeResponseDTO> heroe= heroeService.getHeroeById(23596L);
         assertEquals(null, heroe);
 
@@ -139,8 +144,8 @@ public class HeroeTest {
 
     @Test
     public void whenExistenHeroesConNombre(){
-        when(heroeRepository.buscarPorNombre("man")).thenReturn(Optional.of(heroesModelByNombre));
-        when(heroeService.getHeroesByNombre("man")).thenReturn(heroesDTOByNombre);
+        lenient().when(heroeRepository.buscarPorNombre("man")).thenReturn(Optional.of(heroesModelByNombre));
+        lenient().when(heroeService.getHeroesByNombre("man")).thenReturn(heroesDTOByNombre);
         Optional<HeroesResponseDTO> heroes= heroeService.getHeroesByNombre("man");
         assertEquals(4, heroes.get().getHeroes().size());
     }
@@ -149,19 +154,20 @@ public class HeroeTest {
     @Test
     public void whenSolicitudCreacionHeroeYaExiste(){
 
-        when(heroeService.getHeroesByNombre("Batman")).thenThrow(new HeroeYaExistenteException(ResponseDefault.builder().build()));
+        lenient().when(heroeService.getHeroesByNombre("Batman")).thenThrow(new HeroeYaExistenteException(ResponseDefault.builder().build()));
         heroeService.crearHeroe(CrearHeroeRequestDTO.builder().nombre("Batman").build());
     }
 
     @Test
     public void whenSOlicituModificacionHeroeNoExistente(){
-        when(heroeRepository.findById(3466L)).thenThrow(new HeroeNoEncontradoException(ResponseDefault.builder().build()));
+        lenient().when(heroeRepository.findById(3466L)).thenThrow(new HeroeNoEncontradoException(ResponseDefault.builder().build()));
         heroeService.modificarHeore(ModificarHeroeRequestDTO.builder().heroeId(34466L).nombre("LALALALA").build());
     }
 
     @Test
     public void whenEliminarHeroeExiste(){
-        when(heroeRepository.findById(34676L)).thenThrow(new HeroeNoEncontradoException(ResponseDefault.builder().build()));
+        lenient().when(heroeRepository.findById(34676L)).thenThrow(new HeroeNoEncontradoException(ResponseDefault.builder().build()));
+        //when(heroeRepository.findById(34676L)).thenThrow(new HeroeNoEncontradoException(ResponseDefault.builder().build()));
         heroeService.modificarHeore(ModificarHeroeRequestDTO.builder().heroeId(34466L).nombre("LALALALA").build());
     }
     @Test
