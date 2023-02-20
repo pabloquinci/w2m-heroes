@@ -55,6 +55,9 @@ public class HeroeTest {
 
     HeroeDTO heroeSpidermanDTO;
 
+    HeroeDTO heroeManolitoDTO;
+
+
 
     Heroe heroeBatmanModel;
     Heroe heroeSupermanModel;
@@ -62,9 +65,19 @@ public class HeroeTest {
 
     Heroe heroeSpidermanModel;
 
+    Heroe heroeManolitoModel;
+
+
+
     Optional<HeroesDTO> heroes= Optional.of(HeroesDTO.builder().build());
 
     List<Heroe> heroesModel=new ArrayList<>();
+
+
+    List<Heroe> heroesModelByNombre=new ArrayList<>();
+
+    Optional<HeroesDTO> heroesDTOByNombre= Optional.of(HeroesDTO.builder().build());
+
 
     @Before
     public void setUpHeroes() {
@@ -72,6 +85,8 @@ public class HeroeTest {
         heroeSupermanDTO=HeroeDTO.builder().id(3255L).nombre("Superman").build();
         heroeWolverineDTO=HeroeDTO.builder().id(5325L).nombre("Wolverine").build();
         heroeSpidermanDTO=HeroeDTO.builder().id(5355L).nombre("Spiderman").build();
+        heroeManolitoDTO=HeroeDTO.builder().id(5355L).nombre("Manolito el fuerte").build();
+
 
         heroeWolverineModel=Heroe.builder().id(5355L).nombre("Wolverine").build();
 
@@ -83,11 +98,24 @@ public class HeroeTest {
         heroeSupermanModel=modelMapper.map(heroeSupermanDTO,Heroe.class);
         heroeWolverineModel=modelMapper.map(heroeWolverineDTO,Heroe.class);
         heroeSpidermanModel=modelMapper.map(heroeSpidermanDTO,Heroe.class);
+        heroeManolitoModel=modelMapper.map(heroeManolitoDTO,Heroe.class);
 
         heroesModel.add(heroeBatmanModel);
         heroesModel.add(heroeWolverineModel);
         heroesModel.add(heroeSupermanModel);
         heroesModel.add(heroeSpidermanModel);
+        heroesModel.add(heroeManolitoModel);
+
+
+        heroesModelByNombre.add(heroeBatmanModel);
+        heroesModelByNombre.add(heroeSupermanModel);
+        heroesModelByNombre.add(heroeSpidermanModel);
+        heroesModelByNombre.add(heroeManolitoModel);
+
+        heroesDTOByNombre.get().setHeroes(new ArrayList<>(List.of(heroeBatmanDTO, heroeSpidermanDTO,heroeSpidermanDTO, heroeManolitoDTO)));
+
+
+
 
     }
 
@@ -113,5 +141,13 @@ public class HeroeTest {
         Optional<HeroeDTO> heroe= heroeService.getHeroeById(23596L);
         assertEquals(null, heroe);
 
+    }
+
+    @Test
+    public void whenExistenHeroesConNombre(){
+        when(heroeRepository.findByNombre("man")).thenReturn(Optional.of(heroesModelByNombre));
+        when(heroeService.getHeroesByNombre("man")).thenReturn(heroesDTOByNombre);
+        Optional<HeroesDTO> heroes= heroeService.getHeroesByNombre("man");
+        assertEquals(4, heroes.get().getHeroes().size());
     }
 }

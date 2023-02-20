@@ -53,6 +53,7 @@ public class HeroeServiceImpl implements HeroeService {
 		return Optional.of(heroeDTO);
 	}
 
+
 	@Override
 	public Optional<HeroesDTO> getAll() {
 		List<Heroe> heroes=heroeRepository.findAll();
@@ -63,6 +64,27 @@ public class HeroeServiceImpl implements HeroeService {
 			listaHeroesDTO.add(heroeDTO);
 		});
 
+		HeroesDTO heroesDTO= HeroesDTO.builder().heroes(listaHeroesDTO).build();
+		return Optional.of(heroesDTO);
+	}
+
+	@Override
+	public Optional<HeroesDTO> getHeroesByNombre(String nombre) {
+		Optional<List<Heroe>> heroes= heroeRepository.findByNombre(nombre);
+		List<HeroeDTO> listaHeroesDTO= new ArrayList<>();
+
+		if(heroes.isEmpty() || heroes.get().size()==0){
+			throw new HeroeNoEncontradoException(ResponseDefault
+					.builder()
+					.date(LocalDateTime.now())
+					.message("Heroes No Encontrados con ese parametro de nombre...")
+					.build());
+		}
+
+		heroes.get().stream().forEach(heroe -> {
+			HeroeDTO heroeDTO= modelMapper.map(heroe, HeroeDTO.class);
+			listaHeroesDTO.add(heroeDTO);
+		});
 		HeroesDTO heroesDTO= HeroesDTO.builder().heroes(listaHeroesDTO).build();
 		return Optional.of(heroesDTO);
 	}
