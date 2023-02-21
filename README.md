@@ -16,7 +16,7 @@ App Backend API de Heroes
 - Build:
   - docker build -t "w2m-heroes-docker" .
 - Run:
-  - docker run --name w2m-heroes-docker -8080:8080 w2m-heroes-docker:latest
+  - docker run --name w2m-heroes-docker -p 8080:8080 w2m-heroes-docker:latest
 
 # Swagger: 
  - http://localhost:8080/swagger-ui/index.html
