@@ -28,9 +28,5 @@ public class Heroe {
 	private String nombre;
 
 
-/*private Heroe(){
-		throw new UnsupportedOperationException("This is a utility class and cannot be instantied")
-	}*/
-
 
 }
