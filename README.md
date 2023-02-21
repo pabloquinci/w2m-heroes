@@ -20,6 +20,10 @@ App Backend API de Heroes
 
 # Swagger: 
  - http://localhost:8080/swagger-ui/index.html
+ 
+ # Nota
+ - Al momento de inciar la app, antes de realizar alguna request correspondiente al CRUD, se debera crear un usaurio en la base con el servicio 'signup' (Crear Usuario),
+ luego el servicio de Login devolverá el token que se utilizará como Bearer en los demás servicios.
   
 # TODO: 
  - Desplegar en EC2
