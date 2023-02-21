@@ -1,6 +1,7 @@
 package com.w2m.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,6 +24,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	UserDetailsServiceImpl userDetailsService;
+
+	@Value("${spring.h2.console.path}")
+	private String h2ConsolePath;
 
 	@Autowired
 	private AuthEntryPointJwt unauthorizedHandler;
@@ -50,13 +54,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+
 		http.cors().and().csrf().disable()
 			.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-			.authorizeRequests().antMatchers("/login**","/swagger-ui/**","/h2-ui/**").permitAll()
-			.antMatchers("/signup**","/h2-ui/**","/swagger-ui/**").permitAll()
-			.anyRequest().authenticated();
+			.authorizeRequests().antMatchers("/login**",
+											"/v2/api-docs/**" ,
+													"/swagger-ui/**",
+											"/swagger-resources/**",
+											"/h2-ui/**")
+				.permitAll()
+				.antMatchers(h2ConsolePath + "/**").permitAll()
+
+				.antMatchers("/signup**").permitAll()
+				.antMatchers("/h2-ui**/**").permitAll()
+
+				.anyRequest().authenticated();
 
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+
 	}
+
+
 }

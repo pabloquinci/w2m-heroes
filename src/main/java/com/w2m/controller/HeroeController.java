@@ -20,36 +20,52 @@ public class HeroeController {
 
 	@GetMapping("")
 	@LogExecutionTime
-	public ResponseEntity<HeroesResponseDTO> getAll() throws Exception {
+	public ResponseEntity<HeroesResponseDTO> getAll() {
 
 		Optional<HeroesResponseDTO> heroesDTO = heroeService.getAll();
 
-		return new ResponseEntity<HeroesResponseDTO>(heroesDTO.get(), HttpStatus.OK);
+		if (heroesDTO.isPresent()){
+			return new ResponseEntity<HeroesResponseDTO>(heroesDTO.get(), HttpStatus.OK);
+		}
+
+		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 
 	}
 
 	@GetMapping("/getHeroeById")
+	@LogExecutionTime
 	@ResponseBody
-	public ResponseEntity<HeroeResponseDTO> getById(@RequestParam(value = "heroeId") Long id) throws Exception {
+	public ResponseEntity<HeroeResponseDTO> getById(@RequestParam(value = "heroeId") Long id) {
 
 		Optional<HeroeResponseDTO> heroeDTO = heroeService.getHeroeById(id);
 
-		return new ResponseEntity<>(heroeDTO.get(), HttpStatus.OK);
+		if(heroeDTO.isPresent()){
+			return new ResponseEntity<HeroeResponseDTO>(heroeDTO.get(), HttpStatus.OK);
+
+		}
+		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 
 	}
 
 	@GetMapping("/getHeroesByNombre")
+	@LogExecutionTime
 	@ResponseBody
-	public ResponseEntity<HeroesResponseDTO> getHeroesByNombre(@RequestParam(value = "nombre") String nombre) throws Exception {
+	public ResponseEntity<HeroesResponseDTO> getHeroesByNombre(@RequestParam(value = "nombre") String nombre) {
 
 		Optional<HeroesResponseDTO> heroesDTO = heroeService.getHeroesByNombre(nombre);
 
-		return new ResponseEntity<HeroesResponseDTO>(heroesDTO.get(), HttpStatus.OK);
+		if(heroesDTO.isPresent()){
+			return new ResponseEntity<HeroesResponseDTO>(heroesDTO.get(), HttpStatus.OK);
+
+		}
+		return new ResponseEntity<>(null, HttpStatus.OK);
+
 	}
 
 	@PostMapping("/crearHeroe")
+	@LogExecutionTime
 	@ResponseBody
-	public ResponseEntity<OperacionHeroeResponseDTO> crearHeroe(@Validated @RequestBody CrearHeroeRequestDTO crearHeroeRequest) throws Exception {
+	public ResponseEntity<OperacionHeroeResponseDTO> crearHeroe(@Validated @RequestBody CrearHeroeRequestDTO crearHeroeRequest){
 
 		OperacionHeroeResponseDTO response = OperacionHeroeResponseDTO.builder().mensaje("Heroe Creado").build();
 
@@ -60,8 +76,9 @@ public class HeroeController {
 	}
 
 	@PutMapping("/modificarHeroe")
+	@LogExecutionTime
 	@ResponseBody
-	public ResponseEntity<OperacionHeroeResponseDTO> modificarHeroe(@Validated @RequestBody ModificarHeroeRequestDTO modificarHeroeRequest) throws Exception {
+	public ResponseEntity<OperacionHeroeResponseDTO> modificarHeroe(@Validated @RequestBody ModificarHeroeRequestDTO modificarHeroeRequest) {
 		OperacionHeroeResponseDTO response = OperacionHeroeResponseDTO.builder().mensaje("Heroe Modificado").build();
 
 		heroeService.modificarHeore(modificarHeroeRequest);
@@ -71,8 +88,9 @@ public class HeroeController {
 	}
 
 	@DeleteMapping("/eliminarHeroe")
+	@LogExecutionTime
 	@ResponseBody
-	public ResponseEntity<OperacionHeroeResponseDTO> eliminarHeroe(@Validated @RequestBody EliminarHeroeRequestDTO eliminarRequest) throws Exception {
+	public ResponseEntity<OperacionHeroeResponseDTO> eliminarHeroe(@Validated @RequestBody EliminarHeroeRequestDTO eliminarRequest) {
 
 	OperacionHeroeResponseDTO response = OperacionHeroeResponseDTO.builder().mensaje("Heroe Eliminado").build();
 
