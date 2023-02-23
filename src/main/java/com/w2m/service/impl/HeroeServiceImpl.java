@@ -73,7 +73,7 @@ public class HeroeServiceImpl implements HeroeService {
 		Optional<List<Heroe>> heroes= heroeRepository.buscarPorNombre(nombre);
 		List<HeroeResponseDTO> listaHeroesDTO= new ArrayList<>();
 
-		if(heroes.isEmpty() || heroes.isEmpty()){
+		if( heroes.isEmpty()){
 			throw new HeroeNoEncontradoException(ResponseDefault
 					.builder()
 					.date(LocalDateTime.now())
@@ -99,7 +99,6 @@ public class HeroeServiceImpl implements HeroeService {
 					.date(LocalDateTime.now())
 					.build());
 		}
-		Heroe heroeNuevo=Heroe.builder().nombre(heroe.getNombre()).build();
 	}
 
 	@Override
@@ -119,8 +118,6 @@ public class HeroeServiceImpl implements HeroeService {
 				.build();
 
 		heroeRepository.save(heroeModificado);
-
-
 	}
 
 	@Override

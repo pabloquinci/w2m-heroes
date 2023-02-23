@@ -14,7 +14,6 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.JoinColumn;
 
-import com.w2m.model.Role;
 import lombok.Getter;
 import lombok.Setter;
 

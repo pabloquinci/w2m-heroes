@@ -23,8 +23,6 @@ import com.w2m.dto.SignupRequest;
 import com.w2m.model.ERole;
 import com.w2m.model.Role;
 import com.w2m.model.User;
-import com.w2m.persistence.RoleRepository;
-import com.w2m.persistence.UserRepository;
 import com.w2m.security.JwtUtils;
 import com.w2m.security.UserDetailsImpl;
 import com.w2m.service.UserService;
@@ -45,7 +43,16 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	JwtUtils jwtUtils;
-	
+
+	private static String ROL_NO_ENCONTRADO= "Error: Rol no encontrado.";
+
+	private static String MAIL_EN_USO= "Error: El mail ya se encuentra en uso";
+
+	private static String NOMBRE_USUARIO_EN_USO= "Error: El mail ya se encuentra en uso";
+
+	private static String USUSARIO_REGISTRADO= "Usuario registrado";
+
+
 	@Override
 	public JwtResponse login(LoginRequest loginRequest) {
 		Authentication authentication = authenticationManager.authenticate(
@@ -64,16 +71,18 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public ResponseEntity<?> registrarse(SignupRequest signUpRequest) {
-		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+		Boolean existeNombreUsuario=userRepository.existsByUsername(signUpRequest.getUsername());
+		if (existeNombreUsuario) {
 			return ResponseEntity
 					.badRequest()
-					.body(new MessageResponse("Error: El nombre de usuario ya esta en uso!"));
+					.body(new MessageResponse(NOMBRE_USUARIO_EN_USO));
 		}
 
-		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+		Boolean existeElMail=userRepository.existsByEmail(signUpRequest.getEmail());
+		if (existeElMail) {
 			return ResponseEntity
 					.badRequest()
-					.body(new MessageResponse("Error: el ya esta en uso!"));
+					.body(new MessageResponse(MAIL_EN_USO));
 		}
 
 		User user = new User(signUpRequest.getUsername(), 
@@ -85,26 +94,26 @@ public class UserServiceImpl implements UserService {
 
 		if (strRoles == null) {
 			Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-					.orElseThrow(() -> new RuntimeException("Error: Rol is not found."));
+					.orElseThrow(() -> new RuntimeException(ROL_NO_ENCONTRADO));
 			roles.add(userRole);
 		} else {
 			strRoles.forEach(role -> {
 				switch (role) {
 				case "admin":
 					Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-							.orElseThrow(() -> new RuntimeException("Error: Rol no encontrado."));
+							.orElseThrow(() -> new RuntimeException(ROL_NO_ENCONTRADO));
 					roles.add(adminRole);
 
 					break;
 				case "mod":
 					Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
-							.orElseThrow(() -> new RuntimeException("Error: Rol no encontrado."));
+							.orElseThrow(() -> new RuntimeException(ROL_NO_ENCONTRADO));
 					roles.add(modRole);
 
 					break;
 				default:
 					Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-							.orElseThrow(() -> new RuntimeException("Error: Rol no encontrado."));
+							.orElseThrow(() -> new RuntimeException(ROL_NO_ENCONTRADO));
 					roles.add(userRole);
 				}
 			});
@@ -112,7 +121,7 @@ public class UserServiceImpl implements UserService {
 
 		user.setRoles(roles);
 		userRepository.save(user);		
-		return ResponseEntity.ok(new MessageResponse("Usuario Registradoª"));
+		return ResponseEntity.ok(new MessageResponse(USUSARIO_REGISTRADO));
 
 	}
 

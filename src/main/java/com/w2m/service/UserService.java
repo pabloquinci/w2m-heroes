@@ -10,6 +10,6 @@ public interface UserService {
 	
 	public JwtResponse login(LoginRequest request);
 	
-	public ResponseEntity<?> registrarse(SignupRequest request);
+	public ResponseEntity registrarse(SignupRequest request);
 
 }

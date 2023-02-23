@@ -1,7 +1,6 @@
 package com.w2m.dto;
 
 import java.util.List;
-import java.util.Set;
 
 public class JwtResponse {
 

@@ -25,7 +25,7 @@ public class HeroeController {
 		Optional<HeroesResponseDTO> heroesDTO = heroeService.getAll();
 
 		if (heroesDTO.isPresent()){
-			return new ResponseEntity<HeroesResponseDTO>(heroesDTO.get(), HttpStatus.OK);
+			return new ResponseEntity<>(heroesDTO.get(), HttpStatus.OK);
 		}
 
 		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);

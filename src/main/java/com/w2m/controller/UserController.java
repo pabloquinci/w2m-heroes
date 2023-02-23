@@ -19,7 +19,7 @@ public class UserController {
     @Autowired
     UserService userService;
     @PostMapping("/login")
-    private ResponseEntity<?>login(HttpServletRequest request, @RequestBody LoginRequest loginRequest){
+    private ResponseEntity<JwtResponse>login(HttpServletRequest request, @RequestBody LoginRequest loginRequest){
 
         JwtResponse responseLogin=userService.login(loginRequest);
         return ResponseEntity.ok(responseLogin);
@@ -27,7 +27,7 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestBody SignupRequest signUpRequest) {
+    public ResponseEntity<MessageResponse> registerUser(@RequestBody SignupRequest signUpRequest) {
 
         ResponseEntity response=userService.registrarse(signUpRequest);
         return ResponseEntity.ok(new MessageResponse("Usuario Registradoª"));
