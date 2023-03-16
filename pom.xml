@@ -180,6 +180,14 @@
 					</execution>
 				</executions>
 			</plugin>
+				<plugin>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-maven-plugin</artifactId>
+					<configuration>
+						<mainClass>com.w2m.AppW2mHeoresApplication</mainClass>
+						<layout>JAR</layout>
+					</configuration>
+				</plugin>
 		</plugins>
 	</build>
 
