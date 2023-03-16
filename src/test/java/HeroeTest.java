@@ -1,18 +1,22 @@
-package com.w2m;
-
 import com.w2m.dto.*;
 import com.w2m.model.Heroe;
 import com.w2m.persistence.HeroeRepository;
 import com.w2m.service.impl.HeroeServiceImpl;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.platform.commons.util.ReflectionUtils;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -22,23 +26,27 @@ import java.util.Objects;
 import java.util.Optional;
 
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @DisplayName("Test Heroes")
 @RunWith(MockitoJUnitRunner.class)
 @DataJpaTest
+@AutoConfigureMockMvc
 public class HeroeTest {
 
 
    @Mock
-    HeroeServiceImpl heroeService;
+   private HeroeServiceImpl heroeService;
+
 
     @Mock
     private HeroeRepository heroeRepository;
 
     @InjectMocks
-    ModelMapper modelMapper;
+    private ModelMapper modelMapper;
 
     HeroeResponseDTO heroeBatmanDTO;
     HeroeResponseDTO heroeSupermanDTO;
@@ -89,6 +97,11 @@ public class HeroeTest {
         heroeSpidermanModel=modelMapper.map(heroeSpidermanDTO,Heroe.class);
         heroeManolitoModel=modelMapper.map(heroeManolitoDTO,Heroe.class);
 
+        heroeWolverineModel=Heroe.builder()
+                .id(heroeWolverineDTO.getId())
+                .nombre(heroeWolverineDTO.getNombre())
+                .build();
+
         heroesModel.add(heroeBatmanModel);
         heroesModel.add(heroeWolverineModel);
         heroesModel.add(heroeSupermanModel);
@@ -101,25 +114,26 @@ public class HeroeTest {
         heroesModelByNombre.add(heroeSpidermanModel);
         heroesModelByNombre.add(heroeManolitoModel);
 
+        modelMapper=mock(ModelMapper.class);
+
         heroesDTOByNombre.get().setHeroes(new ArrayList<>(List.of(heroeBatmanDTO, heroeSpidermanDTO,heroeSpidermanDTO, heroeManolitoDTO)));
-
-
-
 
     }
 
     @DisplayName("Se testea el servicio que devuelve todos los heroes")
     @Test
     public void whenConsultaHeroes() {
+        ReflectionTestUtils.setField(heroeService,"modelMapper",modelMapper);
         lenient().when(heroeRepository.findAll()).thenReturn(heroesModel);
         lenient().when(heroeService.getAll()).thenReturn(heroes);
         HeroesResponseDTO heroes= heroeService.getAll().get();
-        assertEquals(true, !Objects.isNull(heroes));
+        assertTrue(heroeService.getAll().isPresent());
     }
 
     @DisplayName("Se testea heroe existente en la base")
     @Test
     public void whenHeroeExiste(){
+        ReflectionTestUtils.setField(heroeService,"modelMapper",modelMapper);
         lenient().when(heroeRepository.findById(9697L)).thenReturn(Optional.of(heroeWolverineModel));
         lenient().when(heroeService.getHeroeById(9697L)).thenReturn(Optional.of(heroeWolverineDTO));
         Optional<HeroeResponseDTO> heroes= heroeService.getHeroeById(9697L);

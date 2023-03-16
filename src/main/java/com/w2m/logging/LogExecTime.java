@@ -21,7 +21,12 @@ public class LogExecTime {
 
         long executionTime = System.currentTimeMillis() - start;
 
-        LOGGER.info(joinPoint.getSignature() + " Ejecutado en " + executionTime + "ms");
+        StringBuilder strLog= new StringBuilder(joinPoint.getSignature().toString());
+        strLog.append(" Ejecutado en ");
+        strLog.append(executionTime);
+        strLog.append( "ms");
+
+        LOGGER.info(strLog.toString());
         return proceed;
     }
 }
