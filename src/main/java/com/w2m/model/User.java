@@ -31,15 +31,10 @@ public class User {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-//	@NotBlank
-//	@Size(max=20)
 	private String username;
 	
 	private String password;
 	
-//	@NotBlank
-//	@Size(max=20)
-//	@Email
 	private String email;
 	
 	@ManyToMany(fetch = FetchType.LAZY)

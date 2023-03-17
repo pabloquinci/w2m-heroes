@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Optional;
 @RestController
 @RequestMapping("/heroes")
@@ -65,7 +66,7 @@ public class HeroeController {
 	@PostMapping("/crearHeroe")
 	@LogExecutionTime
 	@ResponseBody
-	public ResponseEntity<OperacionHeroeResponseDTO> crearHeroe(@Validated @RequestBody CrearHeroeRequestDTO crearHeroeRequest){
+	public ResponseEntity<OperacionHeroeResponseDTO> crearHeroe(@Valid @RequestBody CrearHeroeRequestDTO crearHeroeRequest){
 
 		OperacionHeroeResponseDTO response = OperacionHeroeResponseDTO.builder().mensaje("Heroe Creado").build();
 

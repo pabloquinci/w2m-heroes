@@ -1,11 +1,19 @@
 package com.w2m.dto;
+import com.sun.istack.NotNull;
+
+import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 public class SignupRequest {
 
+	@NotBlank(message = "El username no puede estar en blanco")
 	private String username;
+	@NotBlank(message = "La password no puede estar en blanco")
 	private String password;
+
+	@NotBlank(message = "El email no puede estar en blanco")
 	private String email;
+	@NotNull
 	private Set<String> role;
 
 	public String getUsername() {

@@ -2,6 +2,8 @@ package com.w2m.dto;
 
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
+
 @Builder
 @Getter
 @Setter
@@ -9,6 +11,6 @@ import lombok.*;
 @NoArgsConstructor
 public class CrearHeroeRequestDTO {
 
-    @NonNull
+    @NotBlank(message = "El parametro nombre no puede ser null")
     private String nombre;
 }

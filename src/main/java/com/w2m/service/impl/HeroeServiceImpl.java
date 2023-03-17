@@ -20,7 +20,7 @@ import com.w2m.service.HeroeService;
 @Service
 public class HeroeServiceImpl implements HeroeService {
 
-	//@Autowired
+	@Autowired
 	private HeroeRepository heroeRepository;
 
 	@Autowired
@@ -28,8 +28,9 @@ public class HeroeServiceImpl implements HeroeService {
 
 
 	@Autowired
-	public HeroeServiceImpl(HeroeRepository heroeRepository){
+	public HeroeServiceImpl(HeroeRepository heroeRepository, ModelMapper modelMapper){
 		this.heroeRepository=heroeRepository;
+		this.modelMapper=modelMapper;
 
 	}
 	@Override

@@ -1,40 +1,33 @@
 package controller;
 
-import ch.qos.logback.core.net.ObjectWriter;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+
 import com.w2m.AppW2mHeoresApplication;
-import com.w2m.controller.HeroeController;
-import com.w2m.dto.CrearHeroeRequestDTO;
 import com.w2m.dto.HeroeResponseDTO;
 import com.w2m.dto.HeroesResponseDTO;
-import com.w2m.dto.OperacionHeroeResponseDTO;
 import com.w2m.model.Heroe;
 import com.w2m.persistence.HeroeRepository;
 import com.w2m.service.impl.HeroeServiceImpl;
 import org.json.JSONObject;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -107,30 +100,53 @@ public class HeroesControllerTest {
     }
 
 
-    /*
+
     @WithMockUser("spring")
     @Test
     public void whenModificarHeroeOk()throws Exception {
-        when(heroeRepository.findByIdAndNombre(1L,"Batman")).thenReturn(Optional.of(Heroe.builder().build()));
+        lenient().when(heroeRepository.findById(3466L)).thenReturn(Optional.of(Heroe.builder().build()));
 
         JSONObject json = new JSONObject();
 
         json.put("heroeId",1);
         json.put("nombre","Batman");
 
-       String idHeroeNuevo= "{\"heroeId\":1";
-        String nombreHeroeNuevo= "\"nombre\":\"name\"}";
+       String idHeroeNuevo= "{\"heroeId\":3466";
+        String nombreHeroeNuevo= "\"nombre\":\"Batman\"}";
         StringBuilder str= new StringBuilder(idHeroeNuevo);
         str.append(",");
         str.append(nombreHeroeNuevo);
 
 
-        mvc.perform(post("/heroes/modificarHeroe")
+        mvc.perform(put("/heroes/modificarHeroe")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json.toString()))
+                        .content(str.toString()))
                 .andExpect(status().isOk());
 
-    }*/
+    }
+
+    @WithMockUser("spring")
+    @Test
+    public void whenEliminarHeroeOk()throws Exception {
+        lenient().when(heroeRepository.findById(3466L)).thenReturn(Optional.empty());
+
+        JSONObject json = new JSONObject();
+
+        json.put("heroeId",1);
+
+        String idHeroeNuevo= "{\"heroeId\":3466";
+        String nombreHeroeNuevo= "\"nombre\":\"Batman\"}";
+        StringBuilder str= new StringBuilder(idHeroeNuevo);
+        str.append(",");
+        str.append(nombreHeroeNuevo);
+
+        mvc.perform(delete("/heroes/eliminarHeroe")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(str.toString()))
+                .andExpect(status().isOk());
+
+    }
 
 }
