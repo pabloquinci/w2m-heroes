@@ -1,11 +1,9 @@
 package com.w2m.service.impl;
 
 import com.w2m.dto.*;
-import com.w2m.exception.HeroeNoEncontradoException;
-import com.w2m.exception.HeroeYaExistenteException;
+import com.w2m.exception.HeroeNoValidoException;
 import com.w2m.model.Heroe;
 import com.w2m.persistence.HeroeRepository;
-import com.w2m.service.impl.HeroeServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -142,7 +140,7 @@ public class HeroeServiceImplTest {
 
 
     @DisplayName("Se testea heroe inexistente")
-    @Test(expected = HeroeNoEncontradoException.class)
+    @Test(expected = HeroeNoValidoException.class)
     public void whenHeroeNoExiste(){
         lenient().when(heroeRepository.findById(23596L)).thenReturn(Optional.empty());
         //lenient().when(heroeService.getHeroeById(23596L)).thenReturn(any());
@@ -162,7 +160,7 @@ public class HeroeServiceImplTest {
 
 
     @DisplayName("Se testea el servicio de creacion de Heroe con un heroe ya existente")
-    @Test(expected = HeroeYaExistenteException.class)
+    @Test(expected = HeroeNoValidoException.class)
     public void whenSolicitudCreacionHeroeYaExiste(){
 
         lenient().when(heroeRepository.findByNombre("Batman")).thenReturn(Optional.of(heroeBatmanModel));
@@ -170,7 +168,7 @@ public class HeroeServiceImplTest {
     }
 
     @DisplayName("Se testea el servicio modifica un heroe, con un heroe inexistente")
-    @Test(expected = HeroeNoEncontradoException.class)
+    @Test(expected = HeroeNoValidoException.class)
     public void whenSOlicituModificacionHeroeNoExistente(){
         lenient().when(heroeRepository.findById(34466L)).thenReturn(Optional.empty());
         heroeService.modificarHeore(ModificarHeroeRequestDTO.builder().heroeId(34466L).nombre("LALALALA").build());
@@ -193,7 +191,7 @@ public class HeroeServiceImplTest {
     }
 
     @DisplayName("Se testea el servicio que elimina un heroe, con heroe inexistente")
-    @Test(expected = HeroeNoEncontradoException.class)
+    @Test(expected = HeroeNoValidoException.class)
     public void whenEliminarHeroeConHeroeInexistente(){
         lenient().when(heroeRepository.findByIdAndNombre(34366L,"Batman")).thenReturn(Optional.empty());
         heroeService.eliminarHeroe(EliminarHeroeRequestDTO.builder().heroeId(3466L).nombre("Batman").build());

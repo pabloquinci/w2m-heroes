@@ -1,41 +1,43 @@
 package com.w2m.controller;
 
-import com.w2m.exception.HeroeNoEncontradoException;
-import com.w2m.exception.HeroeYaExistenteException;
+import com.w2m.exception.HeroeNoValidoException;
 import com.w2m.exception.ResponseDefault;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.time.LocalDateTime;
+
 @RestControllerAdvice
+@Slf4j
 public class ControllerAdvice {
 
     @ExceptionHandler(value= Exception.class)
-    public ResponseEntity<String> exceptionComun(Exception ex){
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseDefault exceptionComun(Exception ex){
+        return new ResponseDefault(ex.getMessage(), LocalDateTime.now());
     }
 
 
-    @ExceptionHandler(value= HeroeNoEncontradoException.class)
-    public ResponseEntity<ResponseDefault> heroeNoEncontradoException(HeroeNoEncontradoException ex){
-        return new ResponseEntity<ResponseDefault>(ex.getResponseDefault(), HttpStatus.NO_CONTENT);
-    }
-
-    @ExceptionHandler(value= HeroeYaExistenteException.class)
-    public ResponseEntity<ResponseDefault> heroeExistenteException(HeroeYaExistenteException ex){
-        return new ResponseEntity<ResponseDefault>(ex.getResponseDefault(), HttpStatus.FOUND);
+    @ExceptionHandler(value= HeroeNoValidoException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseDefault heroeNoEncontradoException(HeroeNoValidoException ex){
+        return ex.getResponseDefault();
     }
 
     @ExceptionHandler(value= IllegalArgumentException.class)
-    public ResponseEntity<String> illegalArgumentException(IllegalArgumentException ex){
-        return new ResponseEntity<String>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseDefault illegalArgumentException(IllegalArgumentException ex){
+        return new ResponseDefault(ex.getMessage(), LocalDateTime.now());
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public ResponseEntity<String> methodArgumentNotValidException(MethodArgumentNotValidException ex){
-        return new ResponseEntity<String>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseDefault methodArgumentNotValidException(MethodArgumentNotValidException ex){
+        return new ResponseDefault(ex.getMessage(), LocalDateTime.now());
 
     }
 

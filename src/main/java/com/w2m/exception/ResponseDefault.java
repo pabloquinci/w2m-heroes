@@ -12,4 +12,5 @@ import java.time.LocalDateTime;
 public class ResponseDefault {
     private String mensaje;
     private LocalDateTime date= LocalDateTime.now();
+
 }

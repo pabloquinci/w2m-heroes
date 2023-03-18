@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Optional;
 
 import com.w2m.dto.*;
-import com.w2m.exception.HeroeNoEncontradoException;
-import com.w2m.exception.HeroeYaExistenteException;
+import com.w2m.exception.HeroeNoValidoException;
 import com.w2m.exception.ResponseDefault;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +18,8 @@ import com.w2m.persistence.HeroeRepository;
 import com.w2m.service.HeroeService;
 
 @Service
+@Slf4j
+
 public class HeroeServiceImpl implements HeroeService {
 
 	@Autowired
@@ -38,7 +40,8 @@ public class HeroeServiceImpl implements HeroeService {
 		Optional <Heroe> heroe= heroeRepository.findById(id);
 
 		if(heroe.isEmpty()){
-			throw new HeroeNoEncontradoException(ResponseDefault
+			log.error("Heroe no encontrado");
+			throw new HeroeNoValidoException(ResponseDefault
 					.builder()
 					.date(LocalDateTime.now())
 					.mensaje("Heroe No Encontrado...")
@@ -75,7 +78,8 @@ public class HeroeServiceImpl implements HeroeService {
 		List<HeroeResponseDTO> listaHeroesDTO= new ArrayList<>();
 
 		if( heroes.isEmpty()){
-			throw new HeroeNoEncontradoException(ResponseDefault
+			log.error("Heroe no encontrado");
+			throw new HeroeNoValidoException(ResponseDefault
 					.builder()
 					.date(LocalDateTime.now())
 					.mensaje("Heroes No Encontrados con ese parametro de nombre...")
@@ -94,19 +98,26 @@ public class HeroeServiceImpl implements HeroeService {
 	public void crearHeroe(CrearHeroeRequestDTO heroe) {
 		Optional<Heroe> heroeBuscado= heroeRepository.findByNombre(heroe.getNombre());
 		if(heroeBuscado.isPresent()){
-			throw new HeroeYaExistenteException(ResponseDefault
+			log.error("El heroe que esta intentando crear ya existe");
+			throw new HeroeNoValidoException(ResponseDefault
 					.builder()
 					.mensaje("El heroe que está intentando crear ya existe")
 					.date(LocalDateTime.now())
 					.build());
 		}
+		Heroe heroeCreado= Heroe.builder()
+				.nombre(heroe.getNombre())
+				.build();
+		log.info("Heroe creado");
+		heroeRepository.save(heroeCreado);
 	}
 
 	@Override
 	public void modificarHeore(ModificarHeroeRequestDTO heroe) {
 		Optional <Heroe> heroeBuscado= heroeRepository.findById(heroe.getHeroeId());
 		if(!heroeBuscado.isPresent()){
-			throw new HeroeNoEncontradoException(ResponseDefault
+			log.error("El heroe que esta intetando modificar no existe");
+			throw new HeroeNoValidoException(ResponseDefault
 					.builder()
 					.mensaje("El heroe que está intentando modificar no existe")
 					.date(LocalDateTime.now())
@@ -117,7 +128,7 @@ public class HeroeServiceImpl implements HeroeService {
 				.nombre(heroe.getNombre())
 				.id(heroeBuscado.get().getId())
 				.build();
-
+		log.info("Heroe modificado");
 		heroeRepository.save(heroeModificado);
 	}
 
@@ -125,7 +136,8 @@ public class HeroeServiceImpl implements HeroeService {
 	public void eliminarHeroe(EliminarHeroeRequestDTO heroe) {
 		Optional <Heroe> heroeBuscado= heroeRepository.findByIdAndNombre(heroe.getHeroeId(), heroe.getNombre());
 		if(!heroeBuscado.isPresent()){
-			throw new HeroeNoEncontradoException(ResponseDefault
+			log.error("El heroe que esta queriendo eliminar no existe");
+			throw new HeroeNoValidoException(ResponseDefault
 					.builder()
 					.mensaje("El heroe que está intentando eliminar no existe")
 					.date(LocalDateTime.now())
@@ -136,6 +148,7 @@ public class HeroeServiceImpl implements HeroeService {
 				.id(heroeBuscado.get().getId())
 				.build();
 
+		log.info("Heroe eliminado");
 		heroeRepository.delete(heroeEliminado);
 	}
 }

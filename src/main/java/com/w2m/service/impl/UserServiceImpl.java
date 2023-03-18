@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import com.w2m.persistence.RoleRepository;
 import com.w2m.persistence.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,6 +29,7 @@ import com.w2m.security.UserDetailsImpl;
 import com.w2m.service.UserService;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 	@Autowired
 	AuthenticationManager authenticationManager;
@@ -73,6 +75,7 @@ public class UserServiceImpl implements UserService {
 	public ResponseEntity<?> registrarse(SignupRequest signUpRequest) {
 		Boolean existeNombreUsuario=userRepository.existsByUsername(signUpRequest.getUsername());
 		if (existeNombreUsuario) {
+			log.error("El usuario que intenta registrar ya existe");
 			return ResponseEntity
 					.badRequest()
 					.body(new MessageResponse(NOMBRE_USUARIO_EN_USO));
@@ -80,6 +83,7 @@ public class UserServiceImpl implements UserService {
 
 		Boolean existeElMail=userRepository.existsByEmail(signUpRequest.getEmail());
 		if (existeElMail) {
+			log.error("El mail con el que intenta registrar ya existe");
 			return ResponseEntity
 					.badRequest()
 					.body(new MessageResponse(MAIL_EN_USO));
@@ -120,7 +124,8 @@ public class UserServiceImpl implements UserService {
 		}
 
 		user.setRoles(roles);
-		userRepository.save(user);		
+		userRepository.save(user);
+		log.info("Usuario registrado");
 		return ResponseEntity.ok(new MessageResponse(USUSARIO_REGISTRADO));
 
 	}
